@@ -1,60 +1,42 @@
-var fs = require('fs');
-var querystring = require('querystring');
+const fs = require('fs');
+const querystring = require('querystring');
 
-var message;
-
-function handler (request, response) {
-
-    var endpoint = request.url;
-
-    if (endpoint === '/') {
-
-        var pathToIndex = __dirname + '/../public/index.html';
-
-        fs.readFile(pathToIndex, function (error, file) {
+const handler = (request, response) => {
+    const url = request.url;
+    if (url === '/') {
+        fs.readFile(`${__dirname}/../public/index.html`, (error, file) => {
             response.writeHead(200, {"Content-Type": "text/html"});
             response.write(file);
             response.end();
         });
-    } else if (endpoint === '/node') {
-
-        message = "I love node!";
-
+    } else if (url === '/node') {
         response.writeHead(200, {"Content-Type": "text/html"});
-        response.write(message);
+        response.write('I love node!');
         response.end();
-
-    } else if (endpoint === '/girls') {
-
-        message = "Node Girls is cool!";
-
+    } else if (url === '/girls') {
         response.writeHead(200, {"Content-Type": "text/html"});
-        response.write(message);
+        response.write("Node Girls is cool!");
         response.end();
-
-    } else if (endpoint === '/create-post') {
-
+    } else if (url === '/create-post') {
         message = "";
-        
-        request.on("data", function(data) {
-            message += data;
+        request.on("data", chunk => {
+            message += chunk;
         });
-
-        request.on("end", function () {
+        request.on("end", () => {
             response.writeHead(302, {"Location": "/"});
             message = querystring.parse(message);
             console.log(message.blogpost);
             response.end();
         });
-
     } else {
-        var pathToFile = __dirname + '/../public' + endpoint;
-        var fileExtensionArray = endpoint.split('.');
-        var fileExtension = fileExtensionArray[1];
+        const filePath = `${__dirname}/../public${url}`;
+        const fileExtensionArray = url.split('.');
+        const fileExtension = fileExtensionArray[1];
 
-        fs.readFile(pathToFile, function (error, file) {
-
-            response.writeHead(200, { "Content-Type": "text/" + fileExtension });
+        fs.readFile(filePath, (error, file) => {
+            response.writeHead(200, {
+                "Content-Type": "text/" + fileExtension
+            });
             response.write(file);
             response.end();
         });
