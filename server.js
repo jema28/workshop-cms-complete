@@ -1,10 +1,9 @@
-var http = require('http');
+const http = require('http');
 
-var handler = require('./src/handler.js');
+const handler = require('./src/handler.js');
 
-var server = http.createServer(handler);
+const server = http.createServer(handler);
 
-server.listen(3000, function () {
-
+server.listen(3000, () => {
     console.log("Server is listening on port 3000. Ready to accept requests!");
 });
