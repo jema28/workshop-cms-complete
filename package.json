@@ -1,24 +1,23 @@
 {
-  "name": "workshop-cms",
+  "name": "workshop-cms-complete",
   "version": "1.0.0",
-  "description": "A cool CMS for blogging",
-  "main": "server.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon src/server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/node-girls/workshop-cms.git"
+    "url": "git+https://github.com/jema28/workshop-cms-complete.git"
   },
-  "keywords": [
-    "CMS",
-    "node.js",
-    "blogging"
-  ],
-  "author": "node-girls",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/node-girls/workshop-cms/issues"
+    "url": "https://github.com/jema28/workshop-cms-complete/issues"
   },
-  "homepage": "https://github.com/node-girls/workshop-cms#readme"
+  "homepage": "https://github.com/jema28/workshop-cms-complete#readme",
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
 }
