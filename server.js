@@ -1,71 +1,55 @@
-var http = require('http');
-var fs = require('fs');
-var querystring = require('querystring');
+const http = require('http');
+const fs = require('fs');
+/* --- SOLUTION --- */
+const querystring = require('querystring');
+/* --------------- */
 
-var message;
-
-function handler (request, response) {
-
-    var endpoint = request.url;
-
+const handler = (request, response) => {
+    const endpoint = request.url;
     if (endpoint === '/') {
-
-        // serve home page
-        fs.readFile(__dirname + '/public/index.html', function (error, file) {
-
+        fs.readFile(__dirname + '/public/index.html', (error, file) => {
             response.writeHead(200, {"Content-Type": "text/html"});
             response.write(file);
             response.end();
         });
     } else if (endpoint === '/node') {
-
-        message = "I love node!";
-
         response.writeHead(200, {"Content-Type": "text/html"});
-        response.write(message);
+        response.write('I love node!');
         response.end();
-
     } else if (endpoint === '/girls') {
-
-        message = "Node Girls is cool!";
-
         response.writeHead(200, {"Content-Type": "text/html"});
-        response.write(message);
+        response.write("Node Girls is cool!");
         response.end();
-
+        /* --- SOLUTION --- */
     } else if (endpoint === '/create-post') {
-
         message = "";
-        
-        request.on("data", function(data) {
-            message += data;
+        request.on("data", chunk => {
+            message += chunk;
         });
-
-        request.on("end", function () {
+        request.on("end", () => {
             response.writeHead(302, {"Location": "/"});
             message = querystring.parse(message);
             console.log(message.blogpost);
             response.end();
         });
-
+        /* --------------- */
     } else {
+        const filePath = `${__dirname}/public${endpoint}`;
+        const fileExtensionArray = endpoint.split('.');
+        const fileExtension = fileExtensionArray[1];
 
-        var pathToFile = __dirname + '/public' + endpoint;
-        var fileExtensionArray = endpoint.split('.');
-        var fileExtension = fileExtensionArray[1];
-
-        fs.readFile(pathToFile, function (error, file) {
-
-            response.writeHead(200, { "Content-Type": "text/" + fileExtension });
+        fs.readFile(filePath, (error, file) => {
+            response.writeHead(200, {
+                "Content-Type": "text/" + fileExtension
+            });
             response.write(file);
             response.end();
         });
     }
 }
 
-var server = http.createServer(handler);
+const server = http.createServer(handler);
 
-server.listen(3000, function () {
-
+server.listen(3000, () => {
     console.log("Server is listening on port 3000. Ready to accept requests!");
 });
